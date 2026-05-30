@@ -59,11 +59,11 @@ date +"%d-%m-%Y %T.%N %Z" ; sleep 0.150 ; docker ps ; ss -tlpn | grep 127.0.0.1:
 
 Скрин команд 
 
-[скрин](./images/task02_01.png)
+![скрин](./images/task02_01.png)
 
 Скрин браузера
 
-[скрин](./images/task02_02.png)
+![скрин](./images/task02_02.png)
 
 
 ## Задача 3
@@ -236,63 +236,6 @@ services:
 
 В качестве ответа приложите скриншоты консоли, где видно все введенные команды и их вывод, файл compose.yaml , скриншот portainer c задеплоенным компоузом.
 
-### Решение
-
-1. Будет запущен compose.yaml
-
-> The default path for a Compose file is compose.yaml (preferred) or compose.yml that is placed in the working directory. Compose also supports docker-compose.yaml and docker-compose.yml for backwards compatibility of earlier versions. If both files exist, Compose prefers the canonical compose.yaml.
-
-2. Добавил следующий блок
-
-```yaml
-include:
-  - docker-compose.yaml 
-```
-Проверка
-```bash
-docker compose up -d
-WARN[0000] Found multiple config files with supported names: /Users/konstantinsokolov/dev/projects/pet_projects/devops/01_virtualization/hw/hw_02/my_hw/task05/compose.yaml, /Users/konstantinsokolov/dev/projects/pet_projects/devops/01_virtualization/hw/hw_02/my_hw/task05/docker-compose.yaml 
-WARN[0000] Using /Users/konstantinsokolov/dev/projects/pet_projects/devops/01_virtualization/hw/hw_02/my_hw/task05/compose.yaml 
-WARN[0000] /Users/konstantinsokolov/dev/projects/pet_projects/devops/01_virtualization/hw/hw_02/my_hw/task05/docker-compose.yaml: `version` is obsolete 
-WARN[0000] /Users/konstantinsokolov/dev/projects/pet_projects/devops/01_virtualization/hw/hw_02/my_hw/task05/compose.yaml: `version` is obsolete 
-[+] Running 3/3
- ✔ Network task05_default        Created                                                                                             0.0s 
- ✔ Container task05-portainer-1  Started                                                                                             0.2s 
- ✔ Container task05-registry-1   Started                                                                                             0.7s
-```
-
-3. Выполните в консоли вашей хостовой ОС необходимые команды чтобы залить образ custom-nginx как custom-nginx:latest в запущенное вами, локальное registry.
-
-```bash
-docker tag sokkos/custom-nginx:1.0.0 127.0.0.1:5000/custom-nginx:latest
-docker push 127.0.0.1:5000/custom-nginx:latest
-
-# проверим
-curl http://127.0.0.1:5000/v2/custom-nginx/tags/list | jq
-  % Total    % Received % Xferd  Average Speed   Time    Time  Time  Current
-                                 Dload  Upload   Total   Spent  Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:--100    42  100    42    0     0   5827      0 --:--:-- --:--:----:--:--  6000
-{
-  "name": "custom-nginx",
-  "tags": [
-    "latest"
-  ]
-}
-```
-
-4. 
-
-```
-services:
-  portainer:
-    # network_mode: host
-    image: portainer/portainer-ce:latest
-    ports:
-      - "9000:9000"
-      - "9443:9443"    
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-```
 ---
 
 ### Правила приема
